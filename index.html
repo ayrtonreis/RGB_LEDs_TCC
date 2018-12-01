@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>LED Panel Controller</title>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="./scripts/plotly-latest.min.js"></script>
+    <script src="./scripts/fabric.js"></script>
+
+    <style>
+
+      body{
+        font-family: Arial;
+      }
+
+      h2{
+        font-size: 16px;
+        margin: 2px;
+      }
+
+      .controls-wrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      .canvas-control-wrapper{
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+      }
+
+      .control-3, .control-4 {
+        min-width: 200px;
+      }
+
+      .control-1 {flex: 0 200px;
+      }
+      .control-2 {flex: 200px;
+      }
+      .control-3 {flex: 0 200px;
+      }
+      .control-4 {flex: 0 200px;
+      }
+
+      fieldset{
+        font-size: 14px;
+      }
+
+      .canvas-mode-btn {
+        text-align: center;
+        cursor: pointer;
+        color: #1d1d1d;
+        font-size: 12px;
+        background: #adadad;
+        /*display: inline-block;*/
+        border-radius: 0px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: rgba(0,0,0,0.1);
+        padding: 8px 18px;
+      }
+
+      .canvas-mode-btn-active{
+        background: #454545;
+        color: #c1c1c1;
+      }
+
+      .canvas-mode-btn-unselectable{
+        color: #848484;
+        cursor: not-allowed;
+      }
+
+    </style>
+
+  </head>
+  <body>
+    <div id="app">
+
+      <h1>LED Panel Controller by Ayrton R.</h1>
+
+
+
+
+      <div class="controls-wrapper">
+        <div v-if="false" class="control-1">
+          <button v-on:click="toggleCommunication"
+                  v-bind:style="{ backgroundColor: isCommunicationOn ? 'red' : 'green'}"
+                  style="color: white; font-size: 20px">
+            {{communicationButtonLabel}}
+          </button>
+        </div>
+        <div class="control-2">
+
+            <h2>Signal Strength:
+              <span style="color: red">{{-50/*signalStrength*/}} dB</span>
+              <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </h2>
+            <h2>PPS (Packets/sec):
+              <span style="color: red">{{30/*pps*/}}</span>
+              <span>&nbsp;&nbsp;</span>
+            </h2>
+            <h2>Ideal PPS: 1000/{{controllerSendingTime}}
+              <span style="color: green">={{fpsIdeal}}</span>
+            </h2>
+
+        </div>
+        <div class="control-3">
+          <fieldset>
+            <legend>Δt to send (ms)</legend>
+            <input v-model="controllerSendingTime" name ="control-2" type="range" min="1" max="100" style="width: 100%;">
+            <input v-model="controllerSendingTime" type="number" min="1" max="100" style="width: 100%;">
+          </fieldset>
+        </div>
+        <div class="control-4">
+          <fieldset>
+            <legend>Brightness</legend>
+            <input v-model="controllerBrightness" name ="control-3" type="range" min="1" max="100" style="width: 100%;">
+            <input v-model="controllerBrightness" type="number" min="1" max="100" style="width: 100%;">
+          </fieldset>
+        </div>
+
+      </div>
+
+      <br>
+
+      <canvas id="main-canvas" >
+      </canvas>
+
+      <div class="canvas-control-wrapper" style="user-select: none; margin: 4px 0 4px 0">
+        <div @click="canvasModePainting" :class="{'canvas-mode-btn': true, 'canvas-mode-btn-active' : canvasMode==='painting'}" style="flex: 0 58px">Painting</div>
+        <div @click="canvasModeClock" :class="{'canvas-mode-btn': true, 'canvas-mode-btn-active' : canvasMode==='clock'}" style="flex: 0 38px">Clock</div>
+        <div @click="canvasModeText" :class="{'canvas-mode-btn': true, 'canvas-mode-btn-active' : canvasMode==='text'}" style="flex: 0 38px">Text</div>
+        <div class="canvas-mode-btn canvas-mode-btn-unselectable" style="flex: 0 38px">File</div>
+        <div @click="canvasModeDemo" :class="{'canvas-mode-btn': true, 'canvas-mode-btn-active' : canvasMode==='demo'}" style="flex: 0 38px">Demo</div>
+      </div>
+
+      <div v-if="canvasMode==='painting'" class="canvas-control-wrapper">
+        <div style="flex: 0 60px">
+          <input v-model="brushColor" type="color" value="#ff0000">
+        </div>
+        <div style="flex: 0 140px">
+          <input type="radio" value="pixel" v-model="brushMode">
+          <label>Single Pixel</label>
+        </div>
+        <div style="flex: 0 152px">
+          <input type="radio" value="canvas" v-model="brushMode">
+          <label>Entire Canvas</label>
+        </div>
+        <div>
+          <button v-on:click="clearMainCanvas">Clear</button>
+        </div>
+      </div>
+
+      <div v-else-if="canvasMode==='text'" class="canvas-control-wrapper">
+        <div>
+          <button v-on:click="openTextEditingWindow"><span style="font-size: 16px;">Edit text</span></button>
+        </div>
+
+      </div>
+
+
+      <div id="charts-wrapper" v-if="false">
+        <div id="chart-main" style="height: 800px;"></div>
+      </div>
+
+
+    </div>
+
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+  </body>
+</html>

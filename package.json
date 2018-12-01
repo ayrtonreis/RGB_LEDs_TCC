@@ -1,0 +1,29 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "./node_modules/.bin/electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "Ayrton",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^2.0.10",
+    "electron-rebuild": "^1.8.2",
+    "electron-reload": "^1.2.5"
+  },
+  "dependencies": {
+    "hsv2rgb": "^1.1.0",
+    "node-fetch": "^2.2.0",
+    "vue": "^2.5.17"
+  }
+}

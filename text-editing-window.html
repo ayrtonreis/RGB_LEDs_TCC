@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Text Editing</title>
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script src="./scripts/fabric.js"></script>
+
+    <style>
+      body{
+        font-family: Arial;
+      }
+
+      .wrapper {
+        height: 200px;
+        margin: auto;
+        padding: 0px;
+      }
+      .one {
+        width: 340px;
+        height: 200px;
+        float: left;
+      }
+      .two {
+        padding: 8px;
+        margin-left: auto;
+        height: 200px;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div id="app">
+
+      <div>
+        <button v-on:click="sendIpcMsg">Testing</button>
+      </div>
+
+
+      <div class="wrapper">
+        <div class="one">
+          <canvas id="preview-text-canvas"> </canvas>
+        </div>
+
+        <div class="two">
+          <div style="display: grid;">
+            <textarea v-model="textArea" rows="4" maxlength="60" style="resize:vertical; min-height: 40px; max-height: 120px;">
+            </textarea>
+          </div>
+
+          <div style="display: flex; margin-top: 8px;">
+            <div style="width: 100px;">
+              <input type="color" id="text-color" name="color"
+                     v-model="textColor" />
+              <label for="text-color">Text</label>
+            </div>
+
+            <div>
+              <input type="color" id="background-color" name="color"
+                     v-model="backgroundColor" />
+              <label for="background-color">Background</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+        require('./text-editing.js')
+    </script>
+  </body>
+</html>
